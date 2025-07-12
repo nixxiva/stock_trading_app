@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  symbol: MyString
+  is_buy: false
+  quantity: 1
+  price: 1.5
+  total_price: 1.5
+  user: one
+
+two:
+  symbol: MyString
+  is_buy: false
+  quantity: 1
+  price: 1.5
+  total_price: 1.5
+  user: two
