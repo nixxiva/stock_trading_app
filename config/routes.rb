@@ -11,6 +11,14 @@ Rails.application.routes.draw do
   get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
 
   # Defines the root path route ("/")
-  root to: "user#index"
+  root to: "trader/users#index"
+
+  namespace :admin do
+    resources :users
+  end
+
+  namespace :trader do
+    resources :users
+  end
   
 end
