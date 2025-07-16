@@ -1,11 +1,5 @@
 class Admin::UsersController < ApplicationController
-  before_action :authenticate_user
-
-  user = current_user   
-
-  def after_sign_in_path_for(user)
-    user.is_admin? ? admin_root_path : root_path
-  end
+  before_action :authenticate_user!
 
   def index
   end
