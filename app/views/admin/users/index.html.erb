@@ -1,4 +1,9 @@
+<p><b><h1>All Users</h1></b></p>
+
 <div>
-  <h1 class="font-bold text-4xl">Admin::Users#index</h1>
-  <p>Find me in app/views/admin/users/index.html.erb</p>
+  <% @all_users.each do |list_user| %>
+    <p><%= list_user.email %></p>
+      <ul>
+        <%= link_to "Show user", admin_user_path(list_user) %>
+<% end %>
 </div>
