@@ -34,16 +34,15 @@ Rails.application.configure do
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = :local
 
-  config.action_mailer.default_url_options = { host: ENV.fetch('MAILER_HOST', 'localhost'), port: 3000 }
+  config.action_mailer.default_url_options = { host: "localhost", port: 3000 }
 
   config.action_mailer.delivery_method =:smtp
   config.action_mailer.smtp_settings = {
-  address: 'smtp.gmail.com',
-  port: 587,
-  user_name: ENV['GMAIL_USERNAME'],
-  password: ENV['GMAIL_PASSWORD'],
-  authentication: 'plain',
-  enable_starttls_auto: true
+  :address => 'smtp.gmail.com', # Corrected line
+  :port => 465,
+  :user_name => 'fernandez.sjackson@gmail.com',
+  :password => ENV.fetch('GMAIL_PASSWORD', nil),
+  :tls => true 
 }
 
   # Don't care if the mailer can't send.
