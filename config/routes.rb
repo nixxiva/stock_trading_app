@@ -14,23 +14,12 @@ Rails.application.routes.draw do
   root to: "trader/users#index"
 
   namespace :admin do
-    get "users/index"
-    get "users/new"
-    get "users/create"
-    get "users/show"
-    get "users/edit"
-    get "users/update"
-    get "users/destroy"
-    get "dashboard/index"
-    get "dashboard/new"
-    get "dashboard/create"
-    get "dashboard/show"
-    get "dashboard/edit"
-    get "dashboard/update"
-    get "dashboard/destroy"
-    root to: 'dashboard#index', as: :root
-    resources :users
-  end
+    resources :users, only: [:index, :new, :create, :show, :edit, :update, :destroy]
+    resources :dashboard, only: [:index, :new, :create, :show, :edit, :update, :destroy]
+
+  # Root route
+  root to: 'dashboard#index', as: :root
+end
 
   namespace :trader do
     resources :users

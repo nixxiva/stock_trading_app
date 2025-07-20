@@ -1,0 +1,21 @@
+<%= form_with model: [:admin, @user] do |form| %>
+  <div>
+    <%= form.label :email %><br>
+    <%= form.text_field :email %>
+    <% @user.errors.full_messages_for(:email).each do |message| %>
+      <div><%= message %></div>
+    <% end %>
+  </div>
+
+  <div>
+    <%= form.label :password %><br>
+    <%= form.password_field :password %><br>
+    <% @user.errors.full_messages_for(:password).each do |message| %>
+      <div><%= message %></div>
+    <% end %>
+  </div>
+
+  <div>
+    <%= form.submit @user.new_record? ? "Create User " : "Update User" %>
+  </div>
+<% end %>
