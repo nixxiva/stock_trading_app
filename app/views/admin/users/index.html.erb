@@ -4,6 +4,9 @@
   <% @all_users.each do |list_user| %>
     <p><%= list_user.email %></p>
       <ul>
-        <%= link_to "Show user", admin_user_path(list_user) %>
+  <%= link_to "Show user", admin_user_path(list_user) %>
+  <%= link_to "Edit", edit_admin_user_path(list_user) %>
+  <%= link_to "Delete", admin_user_path(list_user), 
+        data: { turbo_method: :delete, turbo_confirm: "Confirm delete user" } %>
 <% end %>
 </div>

@@ -1,5 +1,5 @@
 class Admin::UsersController < ApplicationController
-  before_action :set_user, only: [:show, :edit, :update]
+  before_action :set_user, only: [:show, :edit, :update, :destroy]
 
   def index
     @all_users = User.all
@@ -25,28 +25,32 @@ class Admin::UsersController < ApplicationController
   end
 
   def update
-    if @user.update(user_params)
-      redirect_to admin_user_path(@user), notice: "User updated"
+    @user.assign_attributes(user_params)
+    @user.skip_reconfirmation!
+    if @user.save
+      redirect_to admin_user_path(@user), notice: "User updated successfully"
     else 
       render :edit, status: :unprocessable_entity, alert: "Unable to update user"
     end
   end
 
   def destroy
+    @user.destroy
+    redirect_to admin_users_path, notice: "User deleted"
   end
 
   private
 
   def user_params
-    if @user.new_record? 
-      params.require(:user).permit(:email, :password, :password_confirmation)
-    else
-      params.require(:user).permit(:email, :password, :password_confirmation).reject { |key, value| value.blank? }
+    permitted = params.require(:user).permit(:email, :password, :password_confirmation)
+    if permitted[:password].blank?
+      permitted.delete(:password)
+      permitted.delete(:password_confirmation)
     end
+    permitted
   end
 
   def set_user
     @user = User.find(params[:id])
   end
-
 end
