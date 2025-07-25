@@ -10,4 +10,12 @@ class User < ApplicationRecord
 
   validates :email, presence: true, uniqueness: true
   validates :password, length: { minimum: 6 }, allow_blank: true
+
+  def active_for_authentication?
+    super && is_approved?
+  end
+
+  def inactive_message
+    is_approved? ? super : :not_approved
+  end
 end
