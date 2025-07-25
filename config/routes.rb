@@ -14,12 +14,18 @@ Rails.application.routes.draw do
   root to: "trader/users#index"
 
   namespace :admin do
-    resources :users, only: [:index, :new, :create, :show, :edit, :update, :destroy]
-    resources :dashboard, only: [:index, :new, :create, :show, :edit, :update, :destroy]
+    root to: 'dashboard#index', as: :root
 
-  # Root route
-  root to: 'dashboard#index', as: :root
-end
+    resources :dashboard, only: [:index]
+    resources :users, only: [:index, :new, :create, :show, :edit, :update, :destroy] do
+      collection do
+        get :pending_approvals
+      end
+      member do
+        patch :approve
+      end
+    end
+  end
 
   namespace :trader do
     resources :users
