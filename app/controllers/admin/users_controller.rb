@@ -20,11 +20,9 @@ class Admin::UsersController < ApplicationController
     end
   end
 
-  def show
-  end
+  def show; end
 
-  def edit
-  end
+  def edit; end
 
   def update
     @user.assign_attributes(user_params)

@@ -54,6 +54,7 @@ group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem "capybara"
   gem "selenium-webdriver"
+  gem "factory_bot_rails"
 end
 
 gem "tailwindcss-ruby", "~> 4.1"
@@ -64,3 +65,12 @@ gem "devise", "~> 4.9"
 
 # for env variables
 gem 'dotenv-rails', '~> 3.1', '>= 3.1.8', groups: [:development, :test]
+
+group :development, :test do
+  gem 'rspec-rails', '~> 8.0.0'
+end
+
+group :development do
+  gem "rails_live_reload"
+end
+
