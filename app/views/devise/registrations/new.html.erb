@@ -1,4 +1,4 @@
-<div class="mx-auto flex-row bg-red-500">
+<div>
 
   <h2>Sign up</h2>
 
@@ -6,19 +6,19 @@
     <%= render "devise/shared/error_messages", resource: resource %>
     
     <div class="field">
-      <%= f.label :is_admin, "Register as:" %><br>
+      <%= f.label :is_admin, "Register as:" %>
       <%= f.radio_button :is_admin, false %> Trader
       <%= f.radio_button :is_admin, true, checked: true %> Admin
     </div>
 
     <div class="field">
-      <%= f.label :name %><br />
+      <%= f.label :name, class: 'block mb-2 font-bold' %>
       <%= f.text_field :name, autofocus: true, autocomplete: "name" %>
     </div>
 
     <div class="field">
-      <%= f.label :email %><br />
-      <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+      <%= f.label :email, class: 'block mb-2 font-bold' %>
+      <%= f.email_field :email, autocomplete: "email" %>
     </div>
 
     <div class="field">
@@ -38,6 +38,7 @@
       <%= f.submit "Sign up" %>
     </div>
   <% end %>
+
 
   <%= render "devise/shared/links" %>
 
