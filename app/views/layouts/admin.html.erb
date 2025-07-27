@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title><%= content_for(:title) || "Admin Dashboard" %></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag 'tailwind', media: 'all' %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body class="bg-gray-100 min-h-screen flex flex-col">
+    <!-- Navigation Bar -->
+    <nav class="bg-[#24135f] text-green-500 p-1 w-full h-20 sticky top-0 z-50 flex justify-between items-center">
+      <!-- Left Section: Logo or brand name -->
+      <%= link_to "StockTrades", admin_root_path, class: "text-2xl font-bold text-white" %>
+
+      <!-- Right Section: Navigation Links -->
+      <div class="flex space-x-6">
+        <%= link_to "Dashboard", admin_root_path, class: "text-white hover:text-green-400" %>
+        <%= link_to "User Management ", admin_users_path, class: "text-white hover:text-green-400" %>
+        <%= link_to "Pending Approval", pending_approvals_admin_users_path, class: "text-white hover:text-green-400" %>
+        <%= link_to "Transactions", admin_users_path, class: "text-white hover:text-green-400" %>
+        
+      </div>
+      
+      <!-- Logout Button -->
+      <div class="flex items-center">
+        <%= button_to "Log out", destroy_user_session_path, method: :delete, class: "bg-red-500 text-white px-2 py-1 rounded-lg hover:bg-red-700" %>
+      </div>
+
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="container mx-auto px-5 flex-grow">
+      <%= content_for?(:main_content) ? yield(:main_content) : yield %>
+    </main>
+
+    <footer class="bg-gray-800 text-white py-4 mt-8">
+      <div class="container mx-auto text-center text-sm">
+        <p>&copy; <%= Time.now.year %> StockTradingApp. All rights reserved.</p>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,5 +1,4 @@
-<h1>Welcome to Admin Page</h1>
-
-<div class="mt-4">
-<%= button_to "Log out", destroy_user_session_path, method: :delete, class: "bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-700" %>
-</div>
+<% content_for :title, "Admin Dashboard" %>
+<div class="container mx-auto px-5 py-10">
+  <h2 class="text-2xl font-bold mb-5">Dashboard</h2>
+  <p class="mb-5">This is the admin dashboard where you can manage users and view analytics.</p>        
