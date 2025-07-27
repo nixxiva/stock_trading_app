@@ -1,12 +1,39 @@
-<p><b><h1>All Users</h1></b></p>
+<!-- app/views/admin/users/index.html.erb -->
 
-<div>
-  <% @all_users.each do |list_user| %>
-    <p><%= list_user.email %></p>
-      <ul>
-  <%= link_to "Show user", admin_user_path(list_user) %>
-  <%= link_to "Edit", edit_admin_user_path(list_user) %>
-  <%= link_to "Delete", admin_user_path(list_user), 
-        data: { turbo_method: :delete, turbo_confirm: "Confirm delete user" } %>
-<% end %>
+<div class="container mx-auto p-1">
+  <h2 class="text-3xl font-bold text-purple-900 mb-6">All Users</h2>
+
+  <!-- User List Table -->
+  <div class="overflow-x-auto shadow-lg rounded-lg border border-gray-900">
+    <table class="min-w-full table-auto">
+      <thead class="bg-gray-700 text-white">
+        <tr>
+          <th class="px-4 py-2 text-left">Name</th>
+          <th class="px-4 py-2 text-left">Email</th>
+          <th class="px-4 py-2 text-left">Joined</th>
+          <th class="px-4 py-2 text-left">Manage</th>
+        </tr>
+      </thead>
+      
+      <tbody>
+        <% @all_users.each do |user| %>
+          <tr class="bg-gray-50 hover:bg-gray-100">
+            <td class="px-4 py-1"><%= user.name %></td>
+            <td class="px-4 py-1"><%= user.email %></td>
+            <td class="px-4 py-1"><%= user.created_at %></td>
+            <td class="px-4 py-1">
+              <div class="flex space-x-3">
+                
+                <%= link_to "Show", admin_user_path(user), class: "text-blue-600 hover:text-blue-800 px-3 py-1 border border-blue-600 rounded-md transition-colors duration-200" %>
+
+                <%= link_to "Edit", edit_admin_user_path(user), class: "text-yellow-600 hover:text-yellow-800 px-3 py-1 border border-yellow-600 rounded-md transition-colors duration-200" %>
+
+                <%= link_to "Delete", admin_user_path(user), data: { turbo_method: :delete, turbo_confirm: "Are you sure you want to delete this user?" }, class: "text-red-600 hover:text-red-800 px-3 py-1 border border-red-600 rounded-md transition-colors duration-200" %>
+              </div>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
 </div>
