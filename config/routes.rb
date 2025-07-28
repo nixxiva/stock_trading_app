@@ -22,6 +22,9 @@ Rails.application.routes.draw do
 end
 
   namespace :trader do
-    resources :users
+    resources :users do
+      resources :stocks
+      resources :transactions
+    end
   end
 end
