@@ -32,6 +32,15 @@
       </div>
 
     </nav>
+    <% if flash[:notice] %>
+      <div class="notification hidden">
+        <p>✅<%= flash[:notice] %></p>
+      </div>
+    <% elsif flash[:alert] %>
+      <div class="notification hidden">
+        <p>⚠️<%= flash[:alert] %></p>
+      </div>
+    <% end %>
 
     <!-- Main Content Area -->
     <main class="container mx-auto px-5 flex-grow">

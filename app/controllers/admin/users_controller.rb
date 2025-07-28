@@ -36,8 +36,11 @@ class Admin::UsersController < ApplicationController
   end
   
   def destroy
-    @user.destroy
-    redirect_to admin_users_path, notice: "User deleted"
+    if @user.destroy
+      redirect_to admin_users_path, notice: "User deleted"
+    else
+      redirect_to admin_users_path, alert: "Failed to delete user"
+    end
   end
 
   def pending_approvals
@@ -52,7 +55,7 @@ class Admin::UsersController < ApplicationController
   private
   
   def user_params
-    permitted = params.require(:user).permit(:email, :password, :password_confirmation)
+    permitted = params.require(:user).permit(:name, :email, :password, :password_confirmation)
     if permitted[:password].blank?
       permitted.delete(:password)
       permitted.delete(:password_confirmation)
