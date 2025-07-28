@@ -1,1 +1,87 @@
 <h1> Hello World </h1>
+<br>
+<div class="py-16 mx-auto w-90vw">
+
+<h1> New Transaction </h1>
+
+<div class="w-full min-w-full max-h-200px flex-col min-w-600px"  onclick="event.stopImmediatePropagation();">
+  <input id="combobox" type="text" style="min-width: 600px; max-width: 100%;"class="border border-gray rounded-md" style="width: 100%"onkeyup="onkeyUp(event)" placeholder="Select Stock"/>
+  <div id="dropdown" class="flex-col px-5 py-5 border border-gray overflow-y-scroll invisible" style="overflow-y: scroll; max-height: 200px; max-width:600px;">
+    <ul id="dropdownlist">
+      <% $stock_data.each do |stock, details| %>
+        <li "class="hidden" onclick="selectOption(this)"> <%= details[:name] %> <span><%= stock %></span> </li>
+      <% end %>
+    </ul>
+  </div>
+</div>
+  
+<div>
+  <p> Current Stock:  <span id="stockDisplay">textofstock</span> </p>
+  <a id="newTxLink" href='/trader/users/3'>Trade</a>
+</div>
+
+
+ <script>
+  function onkeyUp(e) {
+    let keyword = e.target.value;
+    let dropdownEl = document.querySelector("#dropdown");
+    dropdownEl.classList.remove("invisible");
+  }
+
+  function hideDropDown() {
+    let dropdownEl = document.querySelector("#dropdown");
+    dropdownEl.classList.add("invisible");
+  }
+
+  document.addEventListener("click", () => {
+    hideDropDown();
+  })
+
+
+  let currentInput = document.getElementById("combobox");
+  let currentUser = <%= current_user.id %>;
+
+
+  document.addEventListener("DOMContentLoaded", () => {
+    console.log("hi")
+    renderMenu();
+    let dropdownItems = document.getElementsByTagName("li");
+    Object.values(dropdownItems).forEach((listItem) => {
+      listItem.classList.add("hidden")
+    })
+  })
+
+  function renderMenu() {
+    let dropdownItems = document.getElementsByTagName("li");
+    console.log(currentInput.value)
+    let currentVal = currentInput.value.toLowerCase();
+    if (currentInput.value.length > 2) {
+      console.log("hi")
+      Object.values(dropdownItems).forEach((listItem) => {
+      if (listItem.innerText.toLowerCase().includes(currentVal)) {
+        listItem.classList.remove("hidden")
+      } else {
+        listItem.classList.add("hidden")
+      };
+    })
+    } 
+  }
+
+  currentInput.addEventListener("input", (event) => {
+    renderMenu();
+    let dropdownEl = document.querySelector("#dropdown");
+    dropdownEl.classList.remove("invisible");
+  })
+
+  function selectOption(e) {
+    let innerTxtArr = e.innerHTML.split("<span>");
+    currentInput.value = innerTxtArr[0].trim();
+    let symbolHolder = innerTxtArr[1].split("</span>")[0];
+    let stockDisplay = document.getElementById("stockDisplay");
+    stockDisplay.innerText = symbolHolder;
+    let newTxLink = document.getElementById("newTxLink");
+    newTxLink.href = `/trader/users/${currentUser}/transactions/new?inpsymbol=${symbolHolder}`
+    hideDropDown();
+  }
+</script>
+</div>
