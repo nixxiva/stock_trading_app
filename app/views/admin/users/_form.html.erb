@@ -1,4 +1,13 @@
 <%= form_with model: [:admin, @user] do |form| %>
+
+  <div>
+    <%= form.label :Name %><br>
+    <%= form.text_field :name, value: @user.name %>
+    <% @user.errors.full_messages_for(:name).each do |message| %>
+      <div><%= message %></div>
+    <% end %>
+  </div>
+
   <div>
     <%= form.label :email %><br>
     <%= form.text_field :email, value: @user.email %>
