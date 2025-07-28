@@ -1,0 +1,9 @@
+<%= form_with model: [:trader, current_user, current_user.transactions.build] do |form| %>
+  <div>
+    <label>Category: </label>
+    <%= form.text_field :symbol %>
+  </div>
+  <br>
+  <%= form.submit %>
+
+<% end %>

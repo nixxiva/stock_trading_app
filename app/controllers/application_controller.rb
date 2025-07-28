@@ -14,5 +14,9 @@ class ApplicationController < ActionController::Base
     current_user.is_admin? ? admin_root_path : root_path
   end
 
+  def set_stock_data
+    FmpApi.get_stock_info if !defined?($stock_data)
+  end
+
 end
 
