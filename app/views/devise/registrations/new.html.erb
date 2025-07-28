@@ -1,28 +1,28 @@
-<div class="mx-auto flex-row bg-red-500">
+<div class= "shadow p-6 bg-gray-100 border rounded-md max-w-md mx-auto">
 
-  <h2>Sign up</h2>
+  <h2 class= "font-bold text-3xl text-center mx-auto mb-4">Sign up</h2>
 
   <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
     <%= render "devise/shared/error_messages", resource: resource %>
     
     <div class="field">
-      <%= f.label :is_admin, "Register as:" %><br>
+      <%= f.label :is_admin, "Register as:" %>
       <%= f.radio_button :is_admin, false %> Trader
       <%= f.radio_button :is_admin, true, checked: true %> Admin
     </div>
 
     <div class="field">
-      <%= f.label :name %><br />
+      <%= f.label :name, class: 'block mb-2 font-bold' %>
       <%= f.text_field :name, autofocus: true, autocomplete: "name" %>
     </div>
 
     <div class="field">
-      <%= f.label :email %><br />
-      <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+      <%= f.label :email, class: 'block mb-2 font-bold' %>
+      <%= f.email_field :email, autocomplete: "email" %>
     </div>
 
     <div class="field">
-      <%= f.label :password %>
+      <%= f.label :password, class: 'block mb-2 font-bold' %>
       <% if @minimum_password_length %>
       <em>(<%= @minimum_password_length %> characters minimum)</em>
       <% end %><br />
@@ -30,7 +30,7 @@
     </div>
 
     <div class="field">
-      <%= f.label :password_confirmation %><br />
+      <%= f.label :password_confirmation, class: 'block mb-2 font-bold' %><br />
       <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
     </div>
 
