@@ -2,19 +2,34 @@
 
 <h1> New Transaction </h1>
 
-<%= form_with model: [:trader, current_user, current_user.transactions.build] do |form| %>
+<%= form_with model: [:trader, current_user, @transaction] do |form| %>
   <div>
+    <h4> Current USD Balance: <%= current_user.usd_balance %></h4>
     <label>Stock Symbol: </label>
-    <%= form.text_field :symbol, value: @symbol, disabled: true %>
+    <%= form.text_field :symbol, value: @symbol, readonly: true %>
     <h4>Stock Name: <%= $stock_data[@symbol][:name] %> </h4>
     <h4>Price: <%= $stock_data[@symbol][:price] %> USD</h4>
     <h4> Current stock balance: <%= @stock.balance %> </h4>
+    <h4> Quantity: <%= form.number_field :quantity, in: 1..1000 %> </h4>
+    <% @transaction.errors.full_messages_for(:quantity).each do |message| %>
+      <div><%= message %></div>
+    <% end %>
+    <h4> Total Amount: <span id="totalPrice"></span></h4>
+    <h4> <%= form.radio_button :is_buy, true, checked: true %> BUY </h4>
+    <h4> <%= form.radio_button :is_buy, false%> SELL </h4>
+
   </div>
   <br>
   <%= form.submit %>
 
 <% end %>
 
-
+<script>
+  let txQuantityField = document.getElementById("transaction_quantity")
+  let totalPrice = document.getElementById("totalPrice")
+  txQuantityField.addEventListener("change", () => {
+    totalPrice.innerText = txQuantityField.value * <%= $stock_data[@symbol][:price] %>
+  })
+</script>
 
 </div>
