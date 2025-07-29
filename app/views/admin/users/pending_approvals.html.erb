@@ -1,10 +1,29 @@
-<h1>Pending User Approvals</h1>
-<ul>
-  <% @pending_users.each do |user| %>
-    <li>
-      <%= user.email %>
-      <%= link_to "Approve", approve_admin_user_path(user), 
-                data: { turbo_method: :patch, turbo_confirm: "Approve this user?" } %>
-    </li>
-  <% end %>
-</ul>
+<div class="container mx-auto p-1">
+  <h2 class="text-3xl font-bold text-purple-900 mb-6">Pending User Approvals</h2>
+
+  <div class="overflow-x-auto shadow-lg rounded-lg border border-gray-900">
+    <table class="min-w-full table-auto">
+      <thead class="bg-gray-700 text-white">
+        <tr>
+          <th class="px-4 py-2 text-left">Email</th>
+          <th class="px-4 py-2 text-left">Actions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% @pending_users.each do |user| %>
+          <tr class="bg-gray-50 hover:bg-gray-100">
+            <td class="px-4 py-1"><%= user.email %></td>
+            <td class="px-4 py-1">
+              <div class="flex space-x-3">
+                <%= link_to "Approve", approve_admin_user_path(user), 
+                            data: { turbo_method: :patch, turbo_confirm: "Approve this user?" },
+                            class: "text-green-600 hover:text-green-800 px-3 py-1 border border-green-600 rounded-md transition-colors duration-200" %>
+              </div>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
