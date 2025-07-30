@@ -20,22 +20,12 @@ class Trader::TransactionsController < ApplicationController
     @symbol = @transaction.symbol
     set_stock()
     if @transaction.save
-      p @transaction.quantity
-      p @stock
-      p @stock.balance
       if @transaction.is_buy
         @stock.balance = @stock.balance += @transaction.quantity
       else 
         @stock.balance = @stock.balance -= @transaction.quantity
       end
-      if @stock.save
-        p "saved"
-      else
-        p @stock.balance
-        p @transaction.quantity
-        p @stock.symbol
-        p "unsaved"
-      end
+      @stock.save
       redirect_to trader_user_path(current_user), notice: "successful transaction"
     else
       @symbol = @transaction.symbol
@@ -45,6 +35,7 @@ class Trader::TransactionsController < ApplicationController
   end
 
   def index
+    @transactions = current_user.transactions
   end
 
   private
