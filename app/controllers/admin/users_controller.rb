@@ -49,6 +49,7 @@ class Admin::UsersController < ApplicationController
   
   def approve  
     @user.update(is_approved: true)
+    UserMailer.with(user: @user).approval_email.deliver_now
     redirect_to pending_approvals_admin_users_path, notice: "User approved and can now log in"
   end
   
