@@ -31,7 +31,7 @@ Rails.application.routes.draw do
   namespace :trader do
     resources :users, only: [:show, :index] do
       resources :stocks, only: [:index]
-      resources :transactions, only: [:index, :new]
+      resources :transactions, only: [:index, :new, :create]
     end
   end
 end
