@@ -1,12 +1,33 @@
+<% turbo_page_requires_reload %>
 
 <div>
+<table>
+  <tr>
+    <th> Stock </th>
+    <th> Ticker </th>
+    <th> Quantity </th>
+    <th> Type </th>
+    <th> Date </th>
+    <th> Option </th>
+  </tr>
   <% @transactions.select{|tx| tx.persisted? }.each do |tx| %>
-    <div>
-      <span> Stock: <%= $stock_data[tx.symbol][:name] %> </span>
-      <span> Quantity: <%= tx.quantity %> </span>
-      <span> Ticker: <%= tx.symbol %> </span>
-      <span> <%= tx.is_buy ? "BUY" : "SELL" %></span>
-      <span> <%= link_to "Trade", new_trader_user_transaction_path(current_user, inpsymbol: tx.symbol)%></span>
-    </div>
+    <tr>
+      <td> <%= $stock_data[tx.symbol][:name] %></td>
+
+      <td>  <%= tx.symbol %> </td>
+
+      <td> <%= tx.quantity %> </td>
+
+      <td> <%= tx.is_buy ? "BUY" : "SELL" %> </td>
+
+      <td> <%= tx.created_at.strftime("%b %d, %Y %H:%M") %> </td>
+
+      <td> <%= link_to "Trade", new_trader_user_transaction_path(current_user, inpsymbol: tx.symbol)%> </td>
+    </tr>
   <% end %>
+  <% if @transactions.select{|tx| tx.persisted?}.length == 0 %>
+    <%= link_to "Please purchase a stock first", trader_user_path(current_user)  %>
+  <% end %>
+</table>
+  
 </div>

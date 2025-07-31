@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= content_for(:title) || "Stock Trading App" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= yield :head %>
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="icon" href="/icon.png" type="image/png">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/icon.png">
+    <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+
+  </head>
+
+  <body>
+
+      <nav class="flex border rounded t-nav">
+        <div>
+          <span class=""> Stock Pro</span>
+          <span> <%= current_user.email %> </span>
+          <span> Balance: <%=current_user.usd_balance.round(2)%></span>
+        </div>
+        <div class="flex">
+          <div> <%= button_to "Log out", destroy_user_session_path, method: :delete, class: "bg-red-500 text-white px-2 py-1 rounded-lg hover:bg-red-700" %> </div>
+          <div> <%= link_to "trade", trader_user_path(current_user) %> </div>
+          <div> <%= link_to "stocks", trader_user_stocks_path(current_user) %> </div>
+          <div> <%= link_to "transactions", trader_user_transactions_path(current_user) %> </div>
+        </div>
+      </nav>
+      <p class="notice"><%= notice %></p>
+      <p class="alert"><%= alert %></p>
+      <main class="container mx-auto mt-28 px-5 flex">
+      <%= yield %>
+      </main>
+  </body>
+</html>

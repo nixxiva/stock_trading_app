@@ -1,0 +1,10 @@
+ .t-nav {
+  padding: 6px;
+  justify-content: space-between;
+ }
+
+ .t-radioHolder {
+  display: flex;
+  flex-direction: row;
+  padding: 6px;
+ }
