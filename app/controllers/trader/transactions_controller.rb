@@ -1,6 +1,7 @@
 class Trader::TransactionsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_stock_data
+  layout "trader"
 
   def new
     if $stock_data[params[:inpsymbol]] == nil
@@ -13,23 +14,49 @@ class Trader::TransactionsController < ApplicationController
   end
 
   def create
+    error_msg = "error"
+    is_valid = true
     @transaction = current_user.transactions.new(transaction_params) 
-    @transaction.quantity = 0 if @transaction.quantity == nil
+    if @transaction.quantity == nil
+      @transaction.quantity = 0
+      is_valid = false
+      error_msg = "quantity can't be 0" 
+    end
+    #sets price and total price from the user input
     @transaction.price = $stock_data[@transaction.symbol][:price]
     @transaction.total_price = (@transaction.price * @transaction.quantity)
+
+
     @symbol = @transaction.symbol
-    set_stock()
-    if @transaction.save
+    set_stock() 
+    #checks if the user has enough balance
+    if @transaction.is_buy
+      if @transaction.total_price > current_user.usd_balance
+        is_valid = false
+        error_msg = "Not enough balance"
+      end
+    #checks if user has enough stocks to sell
+    else 
+      if @transaction.quantity > @stock.balance
+        is_valid = false
+        error_msg = "You do not enough of that stock to sell"
+      end
+    end
+
+    
+    if is_valid == true && @transaction.save
       if @transaction.is_buy
         @stock.balance = @stock.balance += @transaction.quantity
+        current_user.usd_balance = current_user.usd_balance - @transaction.total_price
       else 
         @stock.balance = @stock.balance -= @transaction.quantity
+        current_user.usd_balance = current_user.usd_balance + @transaction.total_price
       end
       @stock.save
+      current_user.save
       redirect_to trader_user_path(current_user), notice: "successful transaction"
     else
-      @symbol = @transaction.symbol
-      flash.now[:alert] = "error creating post"
+      flash.now[:alert] = error_msg
       render :new, status: :unprocessable_entity
     end
   end
