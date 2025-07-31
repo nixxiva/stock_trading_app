@@ -11,7 +11,7 @@
     <%= f.label :password, class: 'block font-bold' %><br />
     <%= f.password_field :password, autocomplete: "current-password", class: 'border-gray-300' %>
   </div>
-
+  
   <% if devise_mapping.rememberable? %>
     <div class="mb-2">
       <%= f.check_box :remember_me %>
