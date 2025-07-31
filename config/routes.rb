@@ -25,6 +25,7 @@ Rails.application.routes.draw do
         patch :approve
       end
     end
+    resources :transactions, only: [:index]
   end
 
   namespace :trader do

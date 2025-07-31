@@ -5,8 +5,4 @@ class Admin::DashboardController < ApplicationController
     @all_users = User.where(is_admin: false)
     @pending_users = User.where(is_admin: false, is_approved: false)
   end
-
-  def show
-  end
-
 end
