@@ -1,0 +1,12 @@
+
+<div>
+  <% @transactions.select{|tx| tx.persisted? }.each do |tx| %>
+    <div>
+      <span> Stock: <%= $stock_data[tx.symbol][:name] %> </span>
+      <span> Quantity: <%= tx.quantity %> </span>
+      <span> Ticker: <%= tx.symbol %> </span>
+      <span> <%= tx.is_buy ? "BUY" : "SELL" %></span>
+      <span> <%= link_to "Trade", new_trader_user_transaction_path(current_user, inpsymbol: tx.symbol)%></span>
+    </div>
+  <% end %>
+</div>
