@@ -14,7 +14,7 @@
   <body class="bg-gray-100 min-h-screen flex flex-col">
     <!-- Navigation Bar -->
     <nav class="bg-[#24135f] text-green-500 p-1 w-full h-20 sticky top-0 z-50 flex justify-between items-center">
-      <!-- Left Section: Logo or brand name -->
+      <!-- Left Section: Logo or brand -->
       <%= link_to "StockTrades", admin_root_path, class: "text-2xl font-bold text-white" %>
 
       <!-- Right Section: Navigation Links -->
@@ -28,7 +28,7 @@
       
       <!-- Logout Button -->
       <div class="flex items-center">
-        <%= button_to "Log out", destroy_user_session_path, method: :delete, class: "bg-red-500 text-white px-2 py-1 rounded-lg hover:bg-red-700" %>
+        <%= button_to "Log out", destroy_user_session_path, method: :delete, class: "bg-red-500 text-white px-2 py-1 rounded-lg hover:bg-red-700"%>
       </div>
 
     </nav>
