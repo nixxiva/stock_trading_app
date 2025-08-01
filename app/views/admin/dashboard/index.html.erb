@@ -1,28 +1,39 @@
 <% content_for :title, "Admin Dashboard" %>
 
-<div class="max-w-4xl mx-auto my-8 px-4">
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-    <!-- Feature 1 -->
-    <div class="bg-white rounded-xl shadow p-6 flex flex-col items-center text-center">
-      <i class="fas fa-rocket text-4xl text-indigo-600 mb-3"></i>
-      <h3 class="text-lg font-bold mb-2">Blazing Fast</h3>
-      <p class="text-gray-500 text-sm">Experience lightning-quick load times and smooth interactions that push the boundaries of web performance.</p>
+<%= content_for :title, "Dashboard" %>
+
+<div class="flex-1 p-6">
+  <h2 class="text-3xl font-semibold mb-4">Welcome, Admin <%= @user.name %>!</h2>
+
+  <!-- Dashboard Analytics Section -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <!-- Total Users Analysis -->
+    <div class="bg-white p-6 rounded-lg shadow-md">
+      <h3 class="text-xl font-semibold text-gray-700">User Insights</h3>
+      <div class="mt-4">
+        <p class="text-lg text-gray-700">Total Users: <span class="font-bold text-purple-600"><%= @all_users.count %></span></p>
+        <p class="text-lg text-gray-700">Approved Users: <span class="font-bold text-green-600"><%= @all_users.where(is_approved: true).count %></span></p>
+        <p class="text-lg text-gray-700">Pending Approvals: <span class="font-bold text-orange-600"><%= @pending_users.count %></span></p>
+        <p class="text-lg text-gray-700">Unconfirmed Emails: <span class="font-bold text-red-600"><%= @all_users.where.not(unconfirmed_email: nil).count %></span></p>
+      </div>
     </div>
-    <!-- Feature 2 -->
-    <div class="bg-white rounded-xl shadow p-6 flex flex-col items-center text-center">
-      <i class="fas fa-paint-brush text-4xl text-pink-500 mb-3"></i>
-      <h3 class="text-lg font-bold mb-2">Stunning Design</h3>
-      <p class="text-gray-500 text-sm">Immerse yourself in a visually captivating interface that combines futuristic aesthetics with intuitive usability.</p>
+
+    <!-- User Balance Insights -->
+    <div class="bg-white p-6 rounded-lg shadow-md">
+      <h3 class="text-xl font-semibold text-gray-700">User Balance</h3>
+      <div class="mt-4">
+        <p class="text-lg text-gray-700">Total USD Balance: <span class="font-bold text-blue-600"><%= @all_users.sum(:usd_balance) %></span></p>
+        <p class="text-lg text-gray-700">Average USD Balance: <span class="font-bold text-blue-600"><%= (@all_users.average(:usd_balance) || 0).round(2) %></span></p>
+      </div>
     </div>
-    <!-- Feature 3 -->
-    <div class="bg-white rounded-xl shadow p-6 flex flex-col items-center text-center">
-      <i class="fas fa-shield-alt text-4xl text-green-500 mb-3"></i>
-      <h3 class="text-lg font-bold mb-2">Robust Security</h3>
-      <p class="text-gray-500 text-sm">Rest easy knowing your data is protected by state-of-the-art security measures and encryption protocols.</p>
+  </div>
+
+  <!-- Recently Approved Users (Optional) -->
+  <div class="bg-white p-6 rounded-lg shadow-md mt-8">
+    <h3 class="text-xl font-semibold text-gray-700">Recently Approved Users</h3>
+    <div class="mt-4">
+      <p class="text-lg text-gray-700">Recently approved: <span class="font-bold text-green-600"><%= @all_users.where(is_approved: true).where('created_at > ?', 1.week.ago).count %></span></p>
+      <%= link_to 'View Pending Approvals', pending_approvals_admin_users_path, class: "text-blue-600 hover:text-blue-800 mt-2 inline-block" %>
     </div>
   </div>
 </div>
-
-
-
-

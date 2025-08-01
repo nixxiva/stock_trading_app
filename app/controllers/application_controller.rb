@@ -18,6 +18,11 @@ class ApplicationController < ActionController::Base
     FmpApi.get_stock_info if !defined?($stock_data)
   end
 
+  def authorize_admin!
+    unless current_user.present? && current_user.is_admin? && current_user.is_approved?
+    redirect_to root_path, alert: "You are not authorized to access this administrative area."
+    end
+  end
   def trader_check
     if current_user.is_admin
       redirect_to admin_root_path, alert: "redirected, for traders only"
