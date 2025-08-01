@@ -30,5 +30,11 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  
+  def trader_check
+    if current_user.is_admin
+      redirect_to admin_root_path, alert: "redirected, for traders only"
+    end
+  end
 end
 

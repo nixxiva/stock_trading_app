@@ -49,6 +49,10 @@ group :development, :test do
 
   gem "factory_bot_rails"
   gem "capybara"
+  gem 'chartjs-ror'
+  gem 'chartjs-rails'
+  gem 'kaminari'
+  gem 'ransack'
 end
 
 group :development do

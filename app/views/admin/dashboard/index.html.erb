@@ -2,38 +2,44 @@
 
 <%= content_for :title, "Dashboard" %>
 
-<div class="flex-1 p-6">
-  <h2 class="text-3xl font-semibold mb-4">Welcome, Admin <%= @user.name %>!</h2>
+<div class="flex-1 p-6 space-y-6">
+  <div class="flex items-center justify-between mb-3">
+    <h2 class="text-3xl font-semibold text-gray-800 mb-2">Welcome, Admin <%= @user.name %>!</h2>
+    <!-- Add User Button -->
+    <%= link_to ' + Add User', new_admin_user_path, class: 'bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition duration-300' %>
+  </div>
 
   <!-- Dashboard Analytics Section -->
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
     <!-- Total Users Analysis -->
-    <div class="bg-white p-6 rounded-lg shadow-md">
-      <h3 class="text-xl font-semibold text-gray-700">User Insights</h3>
-      <div class="mt-4">
-        <p class="text-lg text-gray-700">Total Users: <span class="font-bold text-purple-600"><%= @all_users.count %></span></p>
-        <p class="text-lg text-gray-700">Approved Users: <span class="font-bold text-green-600"><%= @all_users.where(is_approved: true).count %></span></p>
-        <p class="text-lg text-gray-700">Pending Approvals: <span class="font-bold text-orange-600"><%= @pending_users.count %></span></p>
-        <p class="text-lg text-gray-700">Unconfirmed Emails: <span class="font-bold text-red-600"><%= @all_users.where.not(unconfirmed_email: nil).count %></span></p>
+    <div class="bg-[#E0E0E0] p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
+      <h3 class="text-xl font-semibold text-gray-800">User Insights</h3>
+      <div class="mt-2 space-y-2 text-gray-700">
+        <p class="text-lg">Total Users: <span class="font-semibold text-purple-600"><%= @all_users.count %></span></p>
+        <p class="text-lg">Approved Users: <span class="font-semibold text-green-600"><%= @all_users.where(is_approved: true).count %></span></p>
+        <p class="text-lg">Pending Approvals: <span class="font-semibold text-orange-600"><%= @pending_users.count %></span></p>
+        <p class="text-lg">Unconfirmed Emails: <span class="font-semibold text-red-600"><%= @all_users.where.not(unconfirmed_email: nil).count %></span></p>
       </div>
     </div>
 
     <!-- User Balance Insights -->
-    <div class="bg-white p-6 rounded-lg shadow-md">
-      <h3 class="text-xl font-semibold text-gray-700">User Balance</h3>
-      <div class="mt-4">
-        <p class="text-lg text-gray-700">Total USD Balance: <span class="font-bold text-blue-600"><%= @all_users.sum(:usd_balance) %></span></p>
-        <p class="text-lg text-gray-700">Average USD Balance: <span class="font-bold text-blue-600"><%= (@all_users.average(:usd_balance) || 0).round(2) %></span></p>
+    <div class="bg-[#E0E0E0] p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
+      <h3 class="text-xl font-semibold text-gray-800">User Balance</h3>
+      <div class="mt-4 space-y-2 text-gray-700">
+        <p class="text-lg">Total USD Balance: <span class="font-semibold text-purple-600"><%= number_to_currency(@all_users.sum(:usd_balance), unit: "$", precision: 2) %></span></p>
+        <p class="text-lg">Average USD Balance: <span class="font-semibold text-purple-600"><%= number_to_currency(@all_users.average(:usd_balance) || 0, unit: "$", precision: 2) %></span></p>
       </div>
     </div>
+
   </div>
 
-  <!-- Recently Approved Users (Optional) -->
-  <div class="bg-white p-6 rounded-lg shadow-md mt-8">
-    <h3 class="text-xl font-semibold text-gray-700">Recently Approved Users</h3>
-    <div class="mt-4">
-      <p class="text-lg text-gray-700">Recently approved: <span class="font-bold text-green-600"><%= @all_users.where(is_approved: true).where('created_at > ?', 1.week.ago).count %></span></p>
-      <%= link_to 'View Pending Approvals', pending_approvals_admin_users_path, class: "text-blue-600 hover:text-blue-800 mt-2 inline-block" %>
+  <!-- Recently Approved Users -->
+  <div class="bg-[#E0E0E0] p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
+    <h3 class="text-xl font-semibold text-gray-800">Recently Approved Users</h3>
+    <div class="mt-2 space-y-2 text-gray-700">
+      <p class="text-lg">Recently approved: <span class="font-semibold text-green-600"><%= @all_users.where(is_approved: true).where('created_at > ?', 1.week.ago).count %></span></p>
+      <%= link_to 'View Pending Approvals', pending_approvals_admin_users_path, class: "text-purple-600 hover:text-purple-800 mt-2 inline-block" %>
     </div>
   </div>
 </div>

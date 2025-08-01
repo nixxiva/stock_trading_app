@@ -44,6 +44,7 @@ class Trader::TransactionsController < ApplicationController
     @symbol = @transaction.symbol
     set_stock() 
     
+    
     #checks if the user has enough balance
     if is_valid && @transaction.is_buy
       if @transaction.total_price > current_user.usd_balance
@@ -58,6 +59,8 @@ class Trader::TransactionsController < ApplicationController
       end
     end
 
+    p @transaction
+    p is_valid
     if is_valid == true && @transaction.save
       #adds and deducts balances
       if @transaction.is_buy
@@ -72,6 +75,7 @@ class Trader::TransactionsController < ApplicationController
       redirect_to trader_user_stocks_path(current_user), notice: "Successful transaction"
     else
       #errors and redirecting
+      puts @transaction.errors.full_messages
       flash.now[:alert] = error_msg
       if redirecting == false
         render :new, status: :unprocessable_entity 

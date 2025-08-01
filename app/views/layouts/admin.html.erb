@@ -6,43 +6,38 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
-
     <%= stylesheet_link_tag 'tailwind', media: 'all' %>
     <%= javascript_importmap_tags %>
   </head>
 
-  <body class="bg-gray-100 min-h-screen flex flex-col">
-    <!-- Navigation Bar -->
+  <body class="bg-[#F5F5F5] min-h-screen flex flex-col">
     <nav class="bg-[#24135f] text-green-500 p-1 w-full h-20 sticky top-0 z-50 flex justify-between items-center">
-      <!-- Left Section: Logo or brand -->
-      <%= link_to "StockTrades", admin_root_path, class: "text-2xl font-bold text-white" %>
+      <%= link_to "StockPro", admin_root_path, class: "text-2xl font-bold text-white" %>
 
-      <!-- Right Section: Navigation Links -->
       <div class="flex space-x-6">
         <%= link_to "Dashboard", admin_root_path, class: "text-white hover:text-green-400" %>
-        <%= link_to "User Management ", admin_users_path, class: "text-white hover:text-green-400" %>
+        <%= link_to "User Management", admin_users_path, class: "text-white hover:text-green-400" %>
         <%= link_to "Pending Approval", pending_approvals_admin_users_path, class: "text-white hover:text-green-400" %>
         <%= link_to "Transactions", admin_transactions_path, class: "text-white hover:text-green-400" %>
-        
       </div>
       
-      <!-- Logout Button -->
       <div class="flex items-center">
         <%= button_to "Log out", destroy_user_session_path, method: :delete, class: "bg-red-500 text-white px-2 py-1 rounded-lg hover:bg-red-700"%>
       </div>
-
     </nav>
-    <% if flash[:notice] %>
-      <div class="notification hidden">
-        <p>✅<%= flash[:notice] %></p>
-      </div>
-    <% elsif flash[:alert] %>
-      <div class="notification hidden">
-        <p>⚠️<%= flash[:alert] %></p>
-      </div>
-    <% end %>
 
-    <!-- Main Content Area -->
+    <div class="container mx-auto mt-4 px-5 z-40">
+      <% if flash[:notice] %>
+        <div data-controller="fade-out" class="bg-green-500 text-center text-white p-4 rounded-md shadow-lg" role="alert">
+          <span>✅ <%= flash[:notice] %></span>
+        </div>
+      <% elsif flash[:alert] %>
+        <div data-controller="fade-out" class="bg-yellow-500 text-center text-white p-4 rounded-md shadow-lg" role="alert">
+          <span>⚠️ <%= flash[:alert] %></span>
+        </div>
+      <% end %>
+
+    </div>
     <main class="container mx-auto px-5 flex-grow">
       <%= content_for?(:main_content) ? yield(:main_content) : yield %>
     </main>

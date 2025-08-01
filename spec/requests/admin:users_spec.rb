@@ -1,11 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe "Admin:users", type: :request do
-  let(:admin_user) { create(:admin_user) } # This ensures it's both an admin and approved
-  let(:user) { create(:user, email: "user_#{SecureRandom.hex(8)}@example.com") }
+  let(:admin_user) { create(:admin_user) }
+  let(:user) { create(:user) }
 
   before do
-    sign_in admin_user  # Sign in the admin user before each test
+    sign_in admin_user
   end
 
   describe "GET /admin/users" do
@@ -24,7 +24,7 @@ RSpec.describe "Admin:users", type: :request do
 
   describe "POST /admin/users" do
     it "creates a new user" do
-      post admin_users_path, params: { user: { email: "examplelang@email.com", password: "a123456" , password_confirmation: "a123456" }}
+      post admin_users_path, params: { user: { name: "Testin User", email: "examplelang@email.com", password: "a123456" , password_confirmation: "a123456" }}
       expect(response).to have_http_status(302)
       follow_redirect!
       expect(response).to have_http_status(200)
