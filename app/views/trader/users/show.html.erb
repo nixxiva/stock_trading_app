@@ -1,5 +1,3 @@
-<% turbo_page_requires_reload %>
-
 
 <div class="py-16 mx-auto w-90vw">
 
@@ -14,11 +12,14 @@
       <% end %>
     </ul>
   </div>
+
+
+  
 </div>
   
 <div>
   <p> Current Stock:  <span id="stockDisplay"></span> </p>
-  <a id="newTxLink" href='/trader/users/3'>Trade</a>
+  <a id="newTxLink" href='javascript:void(0)' class="bg-blue-500 text-white font-bold py-2 px-4 rounded opacity-50 cursor-not-allowed">Trade</a>
 </div>
 
 
@@ -34,26 +35,31 @@
     dropdownEl.classList.add("invisible");
   }
 
-  document.addEventListener("click", () => {
+  function setUp() {
+    document.addEventListener("click", () => {
     hideDropDown();
-  })
-
-
-  let currentInput = document.getElementById("combobox");
-  let currentUser = <%= current_user.id %>;
-
-
-  document.addEventListener("DOMContentLoaded", () => {
-    console.log("hi")
+    })  
+    let currentInput = document.getElementById("combobox");
+    let currentUser = <%= current_user.id %>;
+    document.addEventListener("DOMContentLoaded", () => {
     renderMenu();
     let dropdownItems = document.getElementsByTagName("li");
     Object.values(dropdownItems).forEach((listItem) => {
       listItem.classList.add("hidden")
     })
-  })
+    })
+    currentInput.addEventListener("input", (event) => {
+      renderMenu();
+      let dropdownEl = document.querySelector("#dropdown");
+      dropdownEl.classList.remove("invisible");
+    })
+  }
+  
+
 
   function renderMenu() {
     let dropdownItems = document.getElementsByTagName("li");
+    let currentInput = document.getElementById("combobox");
     console.log(currentInput.value)
     let currentVal = currentInput.value.toLowerCase();
     if (currentInput.value.length > 2) {
@@ -68,14 +74,10 @@
     } 
   }
 
-  currentInput.addEventListener("input", (event) => {
-    renderMenu();
-    let dropdownEl = document.querySelector("#dropdown");
-    dropdownEl.classList.remove("invisible");
-  })
-
   function selectOption(e) {
     let innerTxtArr = e.innerHTML.split("<span>");
+    let currentInput = document.getElementById("combobox");
+    let currentUser = <%= current_user.id %>;
     currentInput.value = innerTxtArr[0].trim();
     let symbolHolder = innerTxtArr[1].split("</span>")[0];
     let stockDisplay = document.getElementById("stockDisplay");
@@ -84,5 +86,7 @@
     newTxLink.href = `/trader/users/${currentUser}/transactions/new?inpsymbol=${symbolHolder}`
     hideDropDown();
   }
+
+  setUp();
 </script>
 </div>
