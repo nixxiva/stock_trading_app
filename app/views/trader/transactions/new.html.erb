@@ -6,7 +6,7 @@
 
 <%= form_with model: [:trader, current_user, @transaction] do |form| %>
   <div>
-    <h4> Current USD Balance: <%= current_user.usd_balance %></h4>
+    <h4> Current USD Balance: <%= current_user.usd_balance.round(2) %></h4>
     <label>Stock Symbol: </label>
     <%= form.text_field :symbol, value: @symbol, readonly: true %>
     <h4>Stock Name: <%= $stock_data[@symbol][:name] %> </h4>

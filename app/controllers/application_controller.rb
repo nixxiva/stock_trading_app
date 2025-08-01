@@ -18,5 +18,11 @@ class ApplicationController < ActionController::Base
     FmpApi.get_stock_info if !defined?($stock_data)
   end
 
+  def trader_check
+    if current_user.is_admin
+      redirect_to admin_root_path, alert: "redirected, for traders only"
+    end
+  end
+
 end
 
