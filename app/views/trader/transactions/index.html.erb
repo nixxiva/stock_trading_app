@@ -1,33 +1,45 @@
 <% turbo_page_requires_reload %>
 
-<div>
-<table>
-  <tr>
-    <th> Stock </th>
-    <th> Ticker </th>
-    <th> Quantity </th>
-    <th> Type </th>
-    <th> Date </th>
-    <th> Option </th>
-  </tr>
-  <% @transactions.select{|tx| tx.persisted? }.each do |tx| %>
-    <tr>
-      <td> <%= $stock_data[tx.symbol][:name] %></td>
+<h2 class="text-2xl font-bold text-gray-800 mb-4">Transactions</h2>
 
-      <td>  <%= tx.symbol %> </td>
+<div class="mt-6 overflow-x-auto rounded-xl shadow-md bg-white">
+  <table class="min-w-full text-sm text-left text-black">
+    <thead class="bg-gray-100 text-gray-600 uppercase tracking-wider text-xs">
+      <tr>
+        <th class="px-4 py-3">Stock</th>
+        <th class="px-4 py-3">Ticker</th>
+        <th class="px-4 py-3">Quantity</th>
+        <th class="px-4 py-3">Type</th>
+        <th class="px-4 py-3">Date</th>
+        <th class="px-4 py-3">Option</th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-gray-200">
+      <% @transactions.select(&:persisted?).each do |tx| %>
+        <tr class="hover:bg-gray-50 transition-colors">
+          <td class="px-4 py-3 font-medium"><%= $stock_data[tx.symbol][:name] %></td>
+          <td class="px-4 py-3"><%= tx.symbol %></td>
+          <td class="px-4 py-3"><%= tx.quantity %></td>
+          <td class="px-4 py-3">
+            <span class="<%= tx.is_buy ? 'text-green-600' : 'text-red-600' %> font-semibold">
+              <%= tx.is_buy ? "BUY" : "SELL" %>
+            </span>
+          </td>
+          <td class="px-4 py-3"><%= tx.created_at.strftime("%b %d, %Y %H:%M") %></td>
+          <td class="px-4 py-3">
+            <%= link_to "Trade", new_trader_user_transaction_path(current_user, inpsymbol: tx.symbol),
+              class: "text-blue-600 hover:underline" %>
+          </td>
+        </tr>
+      <% end %>
 
-      <td> <%= tx.quantity %> </td>
-
-      <td> <%= tx.is_buy ? "BUY" : "SELL" %> </td>
-
-      <td> <%= tx.created_at.strftime("%b %d, %Y %H:%M") %> </td>
-
-      <td> <%= link_to "Trade", new_trader_user_transaction_path(current_user, inpsymbol: tx.symbol)%> </td>
-    </tr>
-  <% end %>
-  <% if @transactions.select{|tx| tx.persisted?}.length == 0 %>
-    <%= link_to "Please purchase a stock first", trader_user_path(current_user)  %>
-  <% end %>
-</table>
-  
+      <% if @transactions.select(&:persisted?).empty? %>
+        <tr>
+          <td colspan="6" class="px-4 py-6 text-center text-gray-500">
+            <%= link_to "Please purchase a stock first", trader_user_path(current_user), class: "text-blue-600 hover:underline" %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
 </div>
