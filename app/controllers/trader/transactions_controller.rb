@@ -5,7 +5,7 @@ class Trader::TransactionsController < ApplicationController
   layout "trader"
 
   def new
-    if $stock_data[params[:inpsymbol]] == nil
+    if !$stock_data.has_key?(params[:inpsymbol])
       redirect_to trader_user_path(current_user), notice: "Redirected, no such stock ticker in database"
     else
       @symbol = params[:inpsymbol]
@@ -15,38 +15,51 @@ class Trader::TransactionsController < ApplicationController
   end
 
   def create
-    error_msg = "error"
+    #initial checker variables
+    error_msg = "Error"
     is_valid = true
+    redirecting = false
     @transaction = current_user.transactions.new(transaction_params) 
+    #validity checkers
+    if transaction_params.keys.size < 3
+      is_valid = false
+      error_msg = "missing parameters"
+    end
+    if !$stock_data.has_key?(@transaction.symbol)
+      is_valid = false
+      error_msg = "Redirected, no such stock ticker in database"
+      redirect_to trader_user_path(current_user), notice: "Redirected, no such stock ticker in database"
+      redirecting = true
+    end
     if @transaction.quantity == nil
       @transaction.quantity = 0
       is_valid = false
-      error_msg = "quantity can't be 0" 
+      error_msg = "Quantity can't be 0" 
     end
     #sets price and total price from the user input
-    @transaction.price = $stock_data[@transaction.symbol][:price]
-    @transaction.total_price = (@transaction.price * @transaction.quantity)
-
-
+    if is_valid
+      @transaction.price = $stock_data[@transaction.symbol][:price]
+      @transaction.total_price = (@transaction.price * @transaction.quantity)
+    end
     @symbol = @transaction.symbol
     set_stock() 
     
     #checks if the user has enough balance
-    if @transaction.is_buy
+    if is_valid && @transaction.is_buy
       if @transaction.total_price > current_user.usd_balance
         is_valid = false
         error_msg = "Not enough balance"
       end
     #checks if user has enough stocks to sell
-    else 
+    else
       if @transaction.quantity > @stock.balance
         is_valid = false
         error_msg = "You do not enough of that stock to sell"
       end
     end
-    p @transaction
-    p is_valid
+
     if is_valid == true && @transaction.save
+      #adds and deducts balances
       if @transaction.is_buy
         @stock.balance = @stock.balance += @transaction.quantity
         current_user.usd_balance = current_user.usd_balance - @transaction.total_price
@@ -56,11 +69,13 @@ class Trader::TransactionsController < ApplicationController
       end
       @stock.save
       current_user.save
-      redirect_to trader_user_path(current_user), notice: "successful transaction"
+      redirect_to trader_user_stocks_path(current_user), notice: "Successful transaction"
     else
-      puts @transaction.errors.full_messages
+      #errors and redirecting
       flash.now[:alert] = error_msg
-      render :new, status: :unprocessable_entity
+      if redirecting == false
+        render :new, status: :unprocessable_entity 
+      end
     end
   end
 
@@ -69,10 +84,9 @@ class Trader::TransactionsController < ApplicationController
   end
 
   private
+
   def set_stock()
     if @stock = (current_user.stocks.find_by(symbol: @symbol))
-      p "this is set_stock"
-      puts @stock.balance
     else
         @stock = current_user.stocks.new(symbol: @symbol, balance: 0)
         @stock.save
