@@ -9,7 +9,7 @@ Rails.application.routes.draw do
   get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
 
   # Defines the root path route ("/")
-  root to: "trader/users#index"
+  root to: "trader/stocks#index"
 
   namespace :admin do
     root to: 'dashboard#index', as: :root
@@ -32,6 +32,8 @@ Rails.application.routes.draw do
       resources :transactions, only: [:index, :new, :create]
     end
   end
+
+  match "*unmatched", to: "errors#not_found", via: :all
 
   match "*unmatched", to: "errors#not_found", via: :all
 end

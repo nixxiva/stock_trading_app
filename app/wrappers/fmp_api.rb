@@ -15,7 +15,7 @@ class FmpApi
     response = Net::HTTP.start(uri.hostname, uri.port, req_options) do |http|
       http.request(request)
     end
-
+    
     data = JSON.parse(response.body)
     $stock_data = {}
     data.each do |entry|
