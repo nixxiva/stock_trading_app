@@ -1,32 +1,71 @@
-<% turbo_page_requires_reload %>
+<h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">Trade</h2>
 
+<div class="py-16 w-full max-w-3xl mx-auto px-6 bg-white rounded-xl shadow-md">
+  <!-- New Transaction Section -->
+  <div class="mb-8">
+    <p class="text-lg font-medium text-gray-700">New Transaction</p>
+  </div>
 
-<div class="py-16 mx-auto w-90vw">
+  <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-6">
+    <div class="flex flex-col gap-2 text-gray-700">
+      <div class="text-sm">Current Stock: <span id="stockDisplay" class="font-semibold text-gray-900"></span></div>
+      <div id="buttonErrorBox" class="bg-red-100 text-red-600 px-3 py-1 rounded text-sm shadow-sm hidden">
+        <p id="buttonErrorMsg"></p>
+      </div>
+    </div>
 
-<h1> New Transaction </h1>
+    <div class="w-fit">
+      <a id="newTxLink"
+         onclick="checkEmpty()"
+         href="javascript:void(0)"
+         class="inline-block bg-gray-100 hover:bg-gray-200 text-gray-800 font-semibold px-4 py-2 border border-gray-400 rounded-md shadow transition">
+        Trade
+      </a>
+    </div>
+  </div>
 
-<div class="w-full min-w-full max-h-200px flex-col min-w-600px"  onclick="event.stopImmediatePropagation();">
-  <input id="combobox" type="text" style="min-width: 600px; max-width: 100%;"class="border border-gray rounded-md" style="width: 100%"onkeyup="onkeyUp(event)" placeholder="Select Stock"/>
-  <div id="dropdown" class="flex-col px-5 py-5 border border-gray overflow-y-scroll invisible" style="overflow-y: scroll; max-height: 200px; max-width:600px;">
-    <ul id="dropdownlist">
-      <% $stock_data.each do |stock, details| %>
-        <li "class="hidden" onclick="selectOption(this)"> <%= details[:name] %> <span><%= stock %></span> </li>
-      <% end %>
-    </ul>
+  <div class="relative" onclick="event.stopImmediatePropagation();">
+    <input id="combobox"
+           type="text"
+           autocomplete="off"
+           onkeyup="onkeyUp(event)"
+           placeholder="Type here.."
+           class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+
+    <div id="dropdown"
+         class="absolute z-10 w-full mt-2 bg-white border border-gray-300 rounded-md shadow-md max-h-60 overflow-y-auto invisible transition-opacity">
+      <ul id="dropdownlist" class="divide-y divide-gray-100">
+        <% $stock_data.each do |stock, details| %>
+          <li class="px-4 py-2 cursor-pointer hover:bg-gray-100 hidden text-sm text-gray-700"
+              onclick="selectOption(this)">
+            <%= details[:name] %> <span class="text-gray-500">(<%= stock %>)</span>
+          </li>
+        <% end %>
+      </ul>
+    </div>
   </div>
 </div>
+
   
-<div>
-  <p> Current Stock:  <span id="stockDisplay"></span> </p>
-  <a id="newTxLink" href='/trader/users/3'>Trade</a>
-</div>
 
-
- <script>
+<script>
   function onkeyUp(e) {
     let keyword = e.target.value;
     let dropdownEl = document.querySelector("#dropdown");
     dropdownEl.classList.remove("invisible");
+  }
+
+  function checkEmpty () {
+    let newTxLink = document.getElementById("newTxLink");
+    let buttonErrorMsg = document.getElementById("buttonErrorMsg");
+    let buttonErrorBox = document.getElementById("buttonErrorBox");
+    if (newTxLink.href == 'javascript:void(0)') {
+      buttonErrorMsg.innerText = "Please select a stock first";
+      buttonErrorBox.classList.remove("hidden");
+    } else {
+      buttonErrorMsg.innerText = "";
+      buttonErrorBox.classList.add("hidden");
+    }
   }
 
   function hideDropDown() {
@@ -34,26 +73,31 @@
     dropdownEl.classList.add("invisible");
   }
 
-  document.addEventListener("click", () => {
+  function setUp() {
+    document.addEventListener("click", () => {
     hideDropDown();
-  })
-
-
-  let currentInput = document.getElementById("combobox");
-  let currentUser = <%= current_user.id %>;
-
-
-  document.addEventListener("DOMContentLoaded", () => {
-    console.log("hi")
+    })  
+    let currentInput = document.getElementById("combobox");
+    let currentUser = <%= current_user.id %>;
+    document.addEventListener("DOMContentLoaded", () => {
     renderMenu();
     let dropdownItems = document.getElementsByTagName("li");
     Object.values(dropdownItems).forEach((listItem) => {
       listItem.classList.add("hidden")
     })
-  })
+    })
+    currentInput.addEventListener("input", (event) => {
+      renderMenu();
+      let dropdownEl = document.querySelector("#dropdown");
+      dropdownEl.classList.remove("invisible");
+    })
+  }
+
+
 
   function renderMenu() {
     let dropdownItems = document.getElementsByTagName("li");
+    let currentInput = document.getElementById("combobox");
     console.log(currentInput.value)
     let currentVal = currentInput.value.toLowerCase();
     if (currentInput.value.length > 2) {
@@ -68,21 +112,28 @@
     } 
   }
 
-  currentInput.addEventListener("input", (event) => {
-    renderMenu();
-    let dropdownEl = document.querySelector("#dropdown");
-    dropdownEl.classList.remove("invisible");
-  })
-
   function selectOption(e) {
-    let innerTxtArr = e.innerHTML.split("<span>");
+    let innerTxtArr = e.innerHTML.split("<span");
+    console.log(e.innerHTML)
+    console.log(e.innerHTML.split("<span"))
+    let currentInput = document.getElementById("combobox");
+    let currentUser = <%= current_user.id %>;
     currentInput.value = innerTxtArr[0].trim();
     let symbolHolder = innerTxtArr[1].split("</span>")[0];
+    symbolHolder = symbolHolder.split(">(")[1]
+    symbolHolder = symbolHolder.split(")")[0]
     let stockDisplay = document.getElementById("stockDisplay");
     stockDisplay.innerText = symbolHolder;
     let newTxLink = document.getElementById("newTxLink");
     newTxLink.href = `/trader/users/${currentUser}/transactions/new?inpsymbol=${symbolHolder}`
     hideDropDown();
+    checkEmpty();
   }
+
+
+
+  setUp();
 </script>
+
+
 </div>

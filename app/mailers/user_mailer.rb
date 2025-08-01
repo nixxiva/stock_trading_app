@@ -1,5 +1,5 @@
 class UserMailer < ApplicationMailer
-  default from: "stockpro@example.com"
+  default from: "StockPro <fernandez.sjackson@gmail.com>"
 
   def approval_email
     @user = params[:user]

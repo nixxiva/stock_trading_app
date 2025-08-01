@@ -3,29 +3,64 @@
 <div class="container mx-auto p-4">
   <div class="flex items-center justify-between mb-6">
     <h1 class="text-3xl font-bold text-purple-900">Transactions</h1>
-    <p class="text-lg font-semibold text-gray-700">Total Transactions: <%= @total_transactions %></p>
+    <div class="flex items-center space-x-4">
+      <p class="text-lg font-semibold text-gray-700">Total: <%= @transactions.total_count %></p>
+    </div>
   </div>
 
-  <div class="overflow-x-auto shadow-lg rounded-lg border border-gray-900">
-    <table class="min-w-full table-auto">
-      <thead class="bg-gray-700 text-white">
-        <tr>
-          <th class="px-3 py-2 text-left">User</th>
-          <th class="px-3 py-2 text-left">Symbol</th>
-          <th class="px-3 py-2 text-left">Amount</th>
-          <th class="px-3 py-2 text-left">Date</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @transactions.each do |transaction| %>
-          <tr class="bg-gray-50 hover:bg-gray-100">
-            <td class="px-4 py-2"><%= transaction.user.name %></td>
-            <td class="px-4 py-2"><%= transaction.symbol %></td>
-            <td class="px-4 py-2"><%= transaction.price %></td>
-            <td class="px-4 py-2"><%= transaction.created_at.strftime("%b %d, %Y") %></td>
+  <%= search_form_for @q, url: admin_transactions_path do |f| %>
+    <div class="mb-6 flex items-center space-x-4">
+      <%= f.search_field :symbol_cont, placeholder: "Search by Symbol", class: "px-4 py-2 border border-gray-300 rounded-lg focus:ring-purple-500 focus:border-purple-500" %>
+      
+      <%= f.select :is_buy_eq, options_for_select([['Buy', 'true'], ['Sell', 'false']], f.object.is_buy_eq), { include_blank: 'All Transactions' }, class: "px-4 py-2 border border-gray-300 rounded-lg focus:ring-purple-500 focus:border-purple-500" %>
+
+      <%= f.submit "Filter", class: "bg-purple-900 px-4 py-2 rounded-lg cursor-pointer hover:bg-purple-800 transition duration-150" %>
+      <%= link_to "Clear", admin_transactions_path, class: "bg-gray-300 px-4 py-2 rounded-lg hover:bg-gray-400 transition duration-150" %>
+    </div>
+  <% end %>
+
+  <% if @transactions.any? %>
+    <div class="overflow-x-auto shadow-lg rounded-lg border border-gray-900">
+      <table class="min-w-full table-auto">
+        <thead class="bg-gray-700 text-white">
+          <tr>
+            <th class="px-3 py-2 text-left">User</th>
+            <th class="px-3 py-2 text-left"><%= sort_link @q, :symbol, "Symbol" %></th>  
+            <th class="px-3 py-2 text-left">Transaction Type</th>
+            <th class="px-3 py-2 text-left">Quantity</th>
+            <th class="px-3 py-2 text-left">Amount</th>
+            <th class="px-3 py-2 text-left">Total</th>
+            <th class="px-3 py-2 text-left"><%= sort_link @q, :created_at, "Date" %></th>
           </tr>
-        <% end %>
-      </tbody>
-    </table>
-  </div>
+        </thead>
+        <tbody>
+          <% @transactions.each do |transaction| %>
+            <tr class="bg-gray-50 hover:bg-gray-100">
+              <td class="px-4 py-2"><%= transaction.user.name %></td>
+              <td class="px-4 py-2 font-semibold"><%= transaction.symbol %></td>
+              <td class="px-4 py-2">
+                <% if transaction.is_buy %>
+                  <span class="inline-block bg-green-500 text-white px-2 py-1 text-xs font-semibold rounded">Buy</span>
+                <% else %>
+                  <span class="inline-block bg-red-500 text-white px-2 py-1 text-xs font-semibold rounded">Sell</span>
+                <% end %>
+              </td>
+              <td class="px-4 py-2"><%= transaction.quantity %></td>
+              <td class="px-4 py-2"><%= number_to_currency(transaction.price) %></td>
+              <td class="px-4 py-2"><%= number_to_currency(transaction.total_price) %></td>
+              <td class="px-4 py-2"><%= transaction.created_at.strftime("%b %d, %Y") %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="mt-6">
+      <%= paginate @transactions %>
+    </div>
+  <% else %>
+    <div class="text-center p-8 text-gray-500 text-lg border rounded-lg shadow-lg">
+      <p>No transactions found matching your criteria.</p>
+    </div>
+  <% end %>
 </div>

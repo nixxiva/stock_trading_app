@@ -46,6 +46,10 @@ group :development, :test do
 
   gem 'chartkick'
   gem 'groupdate'
+  gem 'chartjs-ror'
+  gem 'chartjs-rails'
+  gem 'kaminari'
+  gem 'ransack'
 end
 
 group :development do

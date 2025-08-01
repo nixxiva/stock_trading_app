@@ -21,23 +21,31 @@
 
   <body>
 
-      <nav class="flex border rounded t-nav">
-        <div>
-          <span class=""> Stock Pro</span>
-          <span> <%= current_user.email %> </span>
-          <span> Balance: <%=current_user.usd_balance.round(2)%></span>
+    <nav class="flex items-center justify-between px-6 py-3 bg-black text-white">
+
+      <div class="flex flex-col">
+        <span class="text-2xl font-bold">Stock Pro</span>
+        <div class="text-sm text-gray-400">
+          <span><%= current_user.email %></span> |
+          <span>Balance: $<%= current_user.usd_balance.round(2) %></span>
         </div>
-        <div class="flex">
-          <div> <%= button_to "Log out", destroy_user_session_path, method: :delete, class: "bg-red-500 text-white px-2 py-1 rounded-lg hover:bg-red-700" %> </div>
-          <div> <%= link_to "trade", trader_user_path(current_user) %> </div>
-          <div> <%= link_to "stocks", trader_user_stocks_path(current_user) %> </div>
-          <div> <%= link_to "transactions", trader_user_transactions_path(current_user) %> </div>
-        </div>
-      </nav>
-      <p class="notice"><%= notice %></p>
-      <p class="alert"><%= alert %></p>
-      <main class="container mx-auto mt-28 px-5 flex">
+      </div>
+
+      <div class="flex items-center space-x-4 text-sm">
+        <%= link_to "Trade", trader_user_path(current_user), class: "hover:text-gray-300" %>
+        <%= link_to "Stocks", trader_user_stocks_path(current_user), class: "hover:text-gray-300" %>
+        <%= link_to "Transactions", trader_user_transactions_path(current_user), class: "hover:text-gray-300" %>
+        <%= button_to "Log out", destroy_user_session_path, method: :delete,
+            class: "text-red-400 hover:text-red-300 bg-transparent p-0 border-none" %>
+      </div>
+    </nav>
+
+    <p class="notice flex flex-col text-center font-black-500 text-base font-medium mx-auto bg-green-100"><%= notice %></p>
+    <p class="alert flex flex-col text-center font-black-500 text-base font-medium mx-auto bg-red-100"><%= alert %></p>
+
+      
+    <main class="max-w-6xl mx-auto mt-28 px-6 py-6 bg-white/5 text-black rounded-xl shadow-lg">
       <%= yield %>
-      </main>
+    </main>
   </body>
 </html>

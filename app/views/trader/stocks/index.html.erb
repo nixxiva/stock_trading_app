@@ -1,23 +1,36 @@
+<h2 class="text-2xl font-bold text-gray-800 mb-4">Stocks</h2>
 
-<div>
+<div class="mt-6 overflow-x-auto rounded-xl shadow-md bg-white">
+  <table class="min-w-full text-sm text-left text-black">
+    <thead class="bg-gray-100 text-gray-600 uppercase tracking-wider text-xs">
+      <tr>
+        <th class="px-4 py-3">Stock</th>
+        <th class="px-4 py-3">Ticker</th>
+        <th class="px-4 py-3">Balance</th>
+        <th class="px-4 py-3">Option</th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-gray-200">
+      <% @stocks.select { |stock| stock.persisted? && stock.balance != 0 }.each do |stock| %>
+        <tr class="hover:bg-gray-50 transition-colors">
+          <td class="px-4 py-3 font-medium"><%= $stock_data[stock.symbol][:name] %></td>
+          <td class="px-4 py-3"><%= stock.symbol %></td>
+          <td class="px-4 py-3"><%= stock.balance %></td>
+          <td class="px-4 py-3">
+            <%= link_to "Trade", new_trader_user_transaction_path(current_user, inpsymbol: stock.symbol),
+              class: "text-blue-600 hover:underline" %>
+          </td>
+        </tr>
+      <% end %>
 
-<table>
-  <tr>
-    <th> Stock </th>
-    <th> Ticker </th>
-    <th> Balance </th>
-    <th> Option </th>
-  </tr>
-  <% @stocks.select{|stock| stock.persisted? && stock.balance != 0}.each do |stock| %>
-    <tr>
-      <td> <%= $stock_data[stock.symbol][:name] %> </td>
-      <td> <%= stock.symbol %> </td>
-      <td> <%= stock.balance %> </td>
-      <td> <%= link_to "Trade", new_trader_user_transaction_path(current_user, inpsymbol: stock.symbol)%> </td>
-    </tr>
-  <% end %>
-  <% if @stocks.select{|stock| stock.persisted? && stock.balance != 0}.length == 0 %>
-    <%= link_to "Please purchase a stock first", trader_user_path(current_user)  %>
-  <% end %>
-</table>
+      <% if @stocks.select { |stock| stock.persisted? && stock.balance != 0 }.empty? %>
+        <tr>
+          <td colspan="4" class="px-4 py-6 text-center text-gray-500">
+            <%= link_to "Please purchase a stock first", trader_user_path(current_user),
+              class: "text-blue-600 hover:underline" %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
 </div>

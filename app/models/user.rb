@@ -10,6 +10,7 @@ class User < ApplicationRecord
 
   validates :email, presence: true, uniqueness: true
   validates :password, length: { minimum: 6 }, allow_blank: true
+  validates :name, presence: true
 
   def active_for_authentication?
     super && is_approved?

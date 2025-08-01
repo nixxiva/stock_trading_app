@@ -7,7 +7,8 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  </head>
 
     <%= yield :head %>
 
@@ -22,8 +23,8 @@
   </head>
 
   <body>
-      <p class="notice"><%= notice %></p>
-      <p class="alert"><%= alert %></p>
+      <p class="notice flex flex-col text-center font-black-500 text-base font-medium mx-auto bg-green-100"><%= notice %></p>
+      <p class="alert flex flex-col text-center font-black-500 text-base font-medium mx-auto bg-red-100"><%= alert %></p>
       <main class="container mx-auto px-5 flex">
       <%= yield %>
       </main>

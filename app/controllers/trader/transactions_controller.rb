@@ -1,6 +1,7 @@
 class Trader::TransactionsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_stock_data
+  before_action :trader_check
   layout "trader"
 
   def new
@@ -29,6 +30,7 @@ class Trader::TransactionsController < ApplicationController
 
     @symbol = @transaction.symbol
     set_stock() 
+    
     #checks if the user has enough balance
     if @transaction.is_buy
       if @transaction.total_price > current_user.usd_balance
@@ -42,8 +44,8 @@ class Trader::TransactionsController < ApplicationController
         error_msg = "You do not enough of that stock to sell"
       end
     end
-
-    
+    p @transaction
+    p is_valid
     if is_valid == true && @transaction.save
       if @transaction.is_buy
         @stock.balance = @stock.balance += @transaction.quantity
@@ -56,6 +58,7 @@ class Trader::TransactionsController < ApplicationController
       current_user.save
       redirect_to trader_user_path(current_user), notice: "successful transaction"
     else
+      puts @transaction.errors.full_messages
       flash.now[:alert] = error_msg
       render :new, status: :unprocessable_entity
     end
