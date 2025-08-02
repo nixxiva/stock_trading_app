@@ -6,7 +6,7 @@ class Admin::UsersController < ApplicationController
 
   def index
     @all_users = User.where(is_admin: false).order(created_at: :desc).page(params[:page]).per(5)
-    @total_users = @all_users.total_count
+    @total_users = User.where(is_approved: true).where.not(confirmed_at: nil).count
   end
   
   def new
@@ -71,9 +71,7 @@ class Admin::UsersController < ApplicationController
   end
 
   def user_not_found
-    redirect_to admin_users_path, alert: "User not found"
-  rescue ActiveRecord::RecordNotFound
-    render 'errors/not_found', status: :not_found 
+    redirect_to admin_users_path, alert: "An error occurred while trying to find the information you're getting" 
   rescue StandardError => e
     redirect_to admin_users_path, alert: "An error occurred while trying to find the user."
   end
