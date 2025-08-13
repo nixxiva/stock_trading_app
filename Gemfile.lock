@@ -78,10 +78,6 @@ GEM
     base64 (0.3.0)
     bcrypt (3.1.20)
     benchmark (0.4.1)
-    better_errors (2.10.1)
-      erubi (>= 1.0.0)
-      rack (>= 0.9.0)
-      rouge (>= 1.0.0)
     bigdecimal (3.2.2)
     bindex (0.8.1)
     bootsnap (1.18.6)
@@ -291,7 +287,6 @@ GEM
       actionpack (>= 5.2)
       railties (>= 5.2)
     rexml (3.4.1)
-    rouge (4.6.0)
     rspec-core (3.13.5)
       rspec-support (~> 3.13.0)
     rspec-expectations (3.13.5)
@@ -300,7 +295,7 @@ GEM
     rspec-mocks (3.13.5)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.13.0)
-    rspec-rails (8.0.1)
+    rspec-rails (8.0.2)
       actionpack (>= 7.2)
       activesupport (>= 7.2)
       railties (>= 7.2)
@@ -407,7 +402,6 @@ PLATFORMS
   x86_64-linux-musl
 
 DEPENDENCIES
-  better_errors
   bootsnap
   brakeman
   capybara
@@ -427,7 +421,7 @@ DEPENDENCIES
   rails (~> 7.2.2, >= 7.2.2.1)
   rails_live_reload
   ransack
-  rspec-rails (~> 8.0.0)
+  rspec-rails (~> 8.0.2)
   rubocop-rails-omakase
   selenium-webdriver
   sprockets-rails
